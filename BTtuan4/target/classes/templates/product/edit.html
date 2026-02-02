@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<body>
+
+<div layout:fragment="content">
+
+    <h3 class="mb-4">✏️ Chỉnh sửa sản phẩm</h3>
+
+    <form th:action="@{/products/edit}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- ID -->
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- NAME -->
+        <div class="mb-3">
+            <label class="form-label">Tên sản phẩm</label>
+            <input type="text" th:field="*{name}" class="form-control">
+            <div class="text-danger" th:errors="*{name}"></div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="mb-3">
+            <label class="form-label">Giá</label>
+            <input type="number" th:field="*{price}" class="form-control">
+            <div class="text-danger" th:errors="*{price}"></div>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="mb-3">
+            <label class="form-label">Hình ảnh</label>
+            <input type="file" name="imageProduct" class="form-control">
+
+            <div class="mt-2">
+                <img th:src="@{/images/{img}(img=${product.image})}"
+                     width="120" height="80">
+            </div>
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="mb-3">
+            <label class="form-label">Danh mục</label>
+            <select name="category_id" class="form-control">
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}"
+                        th:selected="${c.id == product.category.id}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Cập nhật</button>
+        <a th:href="@{/products}" class="btn btn-secondary">⬅ Quay lại</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

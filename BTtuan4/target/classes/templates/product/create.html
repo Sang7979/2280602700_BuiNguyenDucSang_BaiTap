@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <title>Thêm sản phẩm</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <h3 class="mb-4">➕ Thêm sản phẩm mới</h3>
+
+    <form th:action="@{/products/create}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- TÊN SẢN PHẨM -->
+        <div class="mb-3">
+            <label class="form-label">Tên sản phẩm</label>
+            <input type="text" th:field="*{name}" class="form-control">
+            <div class="text-danger" th:errors="*{name}"></div>
+        </div>
+
+        <!-- GIÁ -->
+        <div class="mb-3">
+            <label class="form-label">Giá</label>
+            <input type="number" th:field="*{price}" class="form-control">
+            <div class="text-danger" th:errors="*{price}"></div>
+        </div>
+
+        <!-- HÌNH ẢNH -->
+        <div class="mb-3">
+            <label class="form-label">Hình ảnh</label>
+            <input type="file" name="imageProduct" class="form-control">
+            <div class="text-danger" th:errors="*{image}"></div>
+        </div>
+
+        <!-- DANH MỤC -->
+        <div class="mb-3">
+            <label class="form-label">Danh mục</label>
+            <select name="category_id" class="form-control">
+                <option value="">-- Chọn danh mục --</option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}">
+                </option>
+            </select>
+        </div>
+
+        <!-- NÚT -->
+        <button type="submit" class="btn btn-success">
+            💾 Lưu sản phẩm
+        </button>
+        <a th:href="@{/products}" class="btn btn-secondary ms-2">
+            ⬅ Quay lại
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

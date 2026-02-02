@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<body>
+
+<div layout:fragment="content">
+
+    <a th:href="@{/products/create}" class="btn btn-primary mb-3">
+        ➕ Thêm sản phẩm
+    </a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Hình ảnh</th>
+            <th>Danh mục</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="p,st : ${listproduct}">
+            <td th:text="${st.count}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.price}"></td>
+            <td>
+                <img th:src="@{/images/{img}(img=${p.image})}"
+                     width="120" height="80">
+            </td>
+            <td th:text="${p.category.name}"></td>
+            <td>
+                <a th:href="@{'/products/edit/' + ${p.id}}"
+                   class="btn btn-warning btn-sm">Sửa</a>
+                <a th:href="@{'/products/delete/' + ${p.id}}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Xóa sản phẩm này?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
