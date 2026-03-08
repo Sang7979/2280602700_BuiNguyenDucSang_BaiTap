@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark px-3">
+    <a class="navbar-brand text-white" href="#">Home</a>
+    <a class="navbar-brand text-white" th:href="@{/products}">Products</a>
+
+    <form class="d-flex ms-auto" th:action="@{/products}" method="get">
+        <input class="form-control me-2" type="search" name="keyword" placeholder="Search">
+        <button class="btn btn-outline-success">Search</button>
+    </form>
+</nav>
+
+<div class="container mt-4">
+
+    <!-- CREATE BUTTON -->
+    <a th:href="@{/products/create}"
+       class="btn btn-primary mb-3">
+        Create New Product
+    </a>
+
+    <!-- TABLE -->
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th style="width:50px">#</th>
+            <th>Name</th>
+            <th style="width:120px">Price</th>
+            <th style="width:120px">Image</th>
+            <th style="width:150px">Category Name</th>
+            <th style="width:150px">Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="p, stat : ${products}">
+            <td th:text="${stat.count}"></td>
+
+            <td th:text="${p.name}"></td>
+
+            <td th:text="${p.price}"></td>
+
+            <!-- IMAGE FROM URL -->
+            <td>
+                <img th:if="${p.image != null}"
+                     th:src="${p.image}"
+                     width="80"
+                     class="img-thumbnail">
+            </td>
+
+            <td th:text="${p.category.name}"></td>
+
+            <td>
+                <!-- EDIT -->
+                <a th:href="@{/products/edit/{id}(id=${p.id})}"
+                   class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+
+                <!-- DELETE -->
+                <a th:href="@{/products/delete/{id}(id=${p.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+
+        <!-- Nếu không có data -->
+        <tr th:if="${#lists.isEmpty(products)}">
+            <td colspan="6" class="text-center text-danger">
+                No products found
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
+<footer class="text-center mt-5 mb-3">
+    © 2025 - Phát triển ứng dụng J2EE
+</footer>
+
+</body>
+</html>
