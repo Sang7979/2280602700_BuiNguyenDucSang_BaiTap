@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, pageContent)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Bai7 Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="space-body">
+
+<div class="space-background">
+    <div class="stars stars-sm"></div>
+    <div class="stars stars-md"></div>
+    <div class="stars stars-lg"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="moon-glow"></div>
+    <div id="meteor-container"></div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark cosmic-nav sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/products}">
+            ✦ Bai7 Shop
+        </a>
+
+        <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+            <a th:href="@{/products}" class="btn btn-cosmic-nav">Sản phẩm</a>
+            <a th:href="@{/cart}" class="btn btn-cosmic-gold">Giỏ hàng</a>
+            <a th:href="@{/admin/products}" class="btn btn-cosmic-nav">Admin</a>
+
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-cosmic-danger">Đăng xuất</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4 page-shell">
+    <div th:replace="${pageContent}"></div>
+</main>
+
+<script>
+    const meteorContainer = document.getElementById("meteor-container");
+
+    function createMeteor() {
+        const meteor = document.createElement("span");
+        meteor.className = "meteor";
+
+        const startLeft = Math.random() * window.innerWidth;
+        const delay = Math.random() * 0.8;
+        const duration = 1.6 + Math.random() * 1.4;
+        const size = 80 + Math.random() * 140;
+
+        meteor.style.left = startLeft + "px";
+        meteor.style.top = (-100 - Math.random() * 120) + "px";
+        meteor.style.width = size + "px";
+        meteor.style.animationDuration = duration + "s";
+        meteor.style.animationDelay = delay + "s";
+
+        meteorContainer.appendChild(meteor);
+
+        setTimeout(() => {
+            meteor.remove();
+        }, (duration + delay) * 1000 + 300);
+    }
+
+    setInterval(createMeteor, 1200);
+    for (let i = 0; i < 3; i++) {
+        setTimeout(createMeteor, i * 400);
+    }
+</script>
+
+</body>
+</html>

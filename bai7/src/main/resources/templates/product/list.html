@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sản phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="app-bg">
+
+<nav class="navbar navbar-expand-lg navbar-dark glass-nav sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/products}">Bai7 Shop</a>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a th:href="@{/products}" class="btn btn-nav">Sản phẩm</a>
+            <a th:href="@{/cart}" class="btn btn-warning btn-sm px-3">Giỏ hàng</a>
+
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-danger btn-sm px-3">Đăng xuất</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-card">
+            <div>
+                <h1 class="hero-title">Khám phá sản phẩm công nghệ</h1>
+                <p class="hero-subtitle">Tìm kiếm, lọc theo danh mục, sắp xếp theo giá và thêm vào giỏ hàng nhanh chóng.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container pb-5">
+    <div class="filter-card mb-4">
+        <form th:action="@{/products}" method="get" class="row g-3">
+            <div class="col-lg-4">
+                <label class="form-label">Tìm kiếm sản phẩm</label>
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập tên sản phẩm..."
+                       th:value="${keyword}">
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">Danh mục</label>
+                <select name="categoryId" class="form-select">
+                    <option value="">Tất cả danh mục</option>
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}"
+                            th:selected="${categoryId != null and categoryId == c.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">Sắp xếp</label>
+                <select name="sort" class="form-select">
+                    <option value="">Mặc định</option>
+                    <option value="priceAsc" th:selected="${sort == 'priceAsc'}">Giá tăng dần</option>
+                    <option value="priceDesc" th:selected="${sort == 'priceDesc'}">Giá giảm dần</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2 d-flex align-items-end gap-2">
+                <button class="btn btn-dark w-100">Áp dụng</button>
+                <a th:href="@{/products}" class="btn btn-outline-secondary w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="section-head mb-4">
+        <h2 class="section-title">Danh sách sản phẩm</h2>
+        <p class="section-subtitle">
+            Tìm thấy <strong th:text="${products.totalElements}">0</strong> sản phẩm
+        </p>
+    </div>
+
+    <div class="row g-4" th:if="${!#lists.isEmpty(products.content)}">
+        <div class="col-md-6 col-lg-4 col-xl-3" th:each="p : ${products.content}">
+            <div class="product-card h-100">
+                <div class="product-thumb-wrap">
+                    <img class="product-thumb"
+                         th:src="${p.image}"
+                         onerror="this.src='https://placehold.co/600x400?text=No+Image'">
+                </div>
+
+                <div class="product-body">
+                    <div class="product-meta">
+                        <span class="badge rounded-pill text-bg-light"
+                              th:text="${p.category != null ? p.category.name : 'Chưa phân loại'}"></span>
+                    </div>
+
+                    <h5 class="product-name" th:text="${p.name}">Tên sản phẩm</h5>
+
+                    <div class="product-price">
+                        <span th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                    </div>
+
+                    <div class="mt-auto pt-3 d-grid">
+                        <a th:href="@{/cart/add/{id}(id=${p.id})}" class="btn btn-dark">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(products.content)}" class="empty-state">
+        Không có sản phẩm phù hợp.
+    </div>
+
+    <div class="pagination-wrap mt-4" th:if="${products.totalPages > 0}">
+        <a th:if="${products.hasPrevious()}"
+           th:href="@{/products(page=${products.number - 1}, keyword=${keyword}, sort=${sort}, categoryId=${categoryId})}"
+           class="btn btn-outline-dark">
+            Previous
+        </a>
+
+        <span class="page-indicator">
+            Trang <strong th:text="${products.number + 1}">1</strong>
+            /
+            <strong th:text="${products.totalPages}">1</strong>
+        </span>
+
+        <a th:if="${products.hasNext()}"
+           th:href="@{/products(page=${products.number + 1}, keyword=${keyword}, sort=${sort}, categoryId=${categoryId})}"
+           class="btn btn-outline-dark">
+            Next
+        </a>
+    </div>
+</section>
+
+</body>
+</html>
